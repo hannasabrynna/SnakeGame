@@ -12,7 +12,7 @@ const drawSnake = () => {
     cxt.fillStyle = "#ddd"
     snake.forEach((position, index) => {
         if (index == snake.length - 1) {
-            cxt.fillStyle = "green"
+            cxt.fillStyle = "lightblue"
         }
         cxt.fillRect(position.x, position.y, size, size)
     })
