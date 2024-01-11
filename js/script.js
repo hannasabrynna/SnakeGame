@@ -1,11 +1,17 @@
 const canvas = document.querySelector("canvas");
 const cxt = canvas.getContext("2d");
 
+const score = document.querySelector(".score-value");
+const finalScore = document.querySelector(".final-score > span");
+const menu = document.querySelector(".menu-screen");
+const buttonPlay = document.querySelector("bnt-play");
+
+
 const size = 30;
 const snake = [{ x: 270, y: 240 }]
 
 const randomNumber = (min, max) => {
-return Math.round(Math.random() * (max - min) + min)
+    return Math.round(Math.random() * (max - min) + min)
 }
 
 const randomFoodPosition = () => {
@@ -23,11 +29,15 @@ const randomFoodColor = () => {
 
 const food = {
     x: randomFoodPosition(),
-    y: randomFoodPosition(), 
+    y: randomFoodPosition(),
     color: randomFoodColor()
 }
 
-let direction 
+const incrementScore = () => {
+    score.innerText = +score.innerText + 10
+}
+
+let direction
 let LoopId
 
 const drawSnake = () => {
@@ -41,7 +51,7 @@ const drawSnake = () => {
 }
 
 const drawFood = () => {
-    const {x, y, color} = food
+    const { x, y, color } = food
 
     cxt.shadowColor = "yellow"
     cxt.shadowBlur = 10
@@ -51,8 +61,8 @@ const drawFood = () => {
 }
 
 const moveSnake = () => {
-    if(!direction){
-        return 
+    if (!direction) {
+        return
     }
 
     const head = snake[snake.length - 1] //pega o ultimo elemento do array
@@ -80,7 +90,7 @@ const drawGrid = () => {
     cxt.lineWidth = 1
     cxt.strokeStyle = "#191919"
 
-    for (let i = 30; i <canvas.width; i+=30){
+    for (let i = 30; i < canvas.width; i += 30) {
         cxt.beginPath()
         cxt.lineTo(i, 0)
         cxt.lineTo(i, 600)
@@ -94,21 +104,53 @@ const drawGrid = () => {
 }
 
 const checkEat = () => {
-    const head = snake[snake.length - 1] 
+    const head = snake[snake.length - 1]
 
-    if(head.x == food.x && head.y == food.y){
+    if (head.x == food.x && head.y == food.y) {
+        incrementScore()
         snake.push(head)  //Adiciona um novo elemto (o corpo da cobrinha)
 
-        // Gera uma nova comida com posição e cor diferente
-        food.x = randomFoodPosition()
-        food.y = randomFoodPosition(), 
+        // Gera uma nova comida com posição diferente
+        let x = randomFoodPosition()
+        let y = randomFoodPosition()
+
+        //ferifica se a comida não nasceu em nenhum posição que esteja a cobrinha
+        while (snake.find((position) => position.x == x && position.y == y)) {
+            x = randomFoodPosition()
+            y = randomFoodPosition()
+        }
+        food.x = x
+        food.y = y
         food.color = randomFoodColor()
     }
 
 }
 
+const checkCollision = () => {
+    const head = snake[snake.length - 1]
+    const canvasLimit = canvas.width - size
+    const neckIndex = snake.length - 2
+
+    const wallCollision = head.x < 0 || head.x > canvasLimit|| head.y < 0 || head.y > canvasLimit
+    const selfCollision = snake.find((position, index) => {
+        return index < neckIndex && position.x == head.x && position.y == head.y
+    })
+
+    if(wallCollision || selfCollision){
+       gameOver()
+    }
+}
+
+const gameOver = () => {
+    direction = undefined
+
+    menu.style.display = "flex"
+    finalScore.innerText - score
+    canvas.style.filter = "blur(3px)"
+}
+
 const gameLoop = () => {
-   clearInterval(LoopId)  //Limpa o loop antes de iniciar outro
+    clearInterval(LoopId)  //Limpa o loop antes de iniciar outro
 
     cxt.clearRect(0, 0, 600, 600)
     drawGrid()
@@ -116,6 +158,7 @@ const gameLoop = () => {
     drawSnake()
     drawFood()
     checkEat()
+    checkCollision()
 
     LoopId = setTimeout(() => {
         gameLoop()
@@ -123,20 +166,20 @@ const gameLoop = () => {
 }
 gameLoop()
 
-document.addEventListener("keydown", ({key}) => {
-   if (key == "ArrowRight" && direction != "left"){
-    direction = "right"
-   }
+document.addEventListener("keydown", ({ key }) => {
+    if (key == "ArrowRight" && direction != "left") {
+        direction = "right"
+    }
 
-   if (key == "ArrowLeft" && direction != "right"){
-    direction = "left"
-   }
+    if (key == "ArrowLeft" && direction != "right") {
+        direction = "left"
+    }
 
-   if (key == "ArrowDown" && direction != "up"){
-    direction = "down"
-   }
+    if (key == "ArrowDown" && direction != "up") {
+        direction = "down"
+    }
 
-   if (key == "ArrowUp" && direction != "down"){
-    direction = "up"
-   }
+    if (key == "ArrowUp" && direction != "down") {
+        direction = "up"
+    }
 })
