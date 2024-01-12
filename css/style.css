@@ -8,7 +8,8 @@
 }
 
 body{
-    background-color: #191919;
+    /* background-color: #191919; */
+    background-image: linear-gradient(to top, #1E5128, #4E9F3D, #D8E9A8);
     display: flex;
     min-height: 100vh;
     align-items: center;
@@ -19,19 +20,15 @@ body{
 
 h1{
     font-size: 70px;
-}
-
-
-img{
-    width: 10%;
+    
 }
 
 button{
     width: 20%;
     padding: 5px;
     margin: 3%;
-    border: 10px, solid, black;
-    border-radius: 5%;
+    border: 4px solid #333;
+    border-radius: 100px;
     background-color: white;
     font-size: 24px;
     
@@ -42,4 +39,25 @@ button a{
     padding: 5px; 
     color: #191919; 
     font: 500, bolder;
+}
+
+.instructions{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+
+}
+
+.instructions p{
+    padding: 15px;
+    color: #191919;
+}
+
+.instructions img{
+    width: 10%;
 }
