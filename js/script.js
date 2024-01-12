@@ -4,11 +4,11 @@ const cxt = canvas.getContext("2d");
 const score = document.querySelector(".score-value");
 const finalScore = document.querySelector(".final-score > span");
 const menu = document.querySelector(".menu-screen");
-const buttonPlay = document.querySelector("btn-play");
+const buttonPlayAgain = document.querySelector(".btn-play");
 
 
 const size = 30;
-const snake = [{ x: 270, y: 240 }]
+let snake = [{ x: 270, y: 240 }]
 
 const randomNumber = (min, max) => {
     return Math.round(Math.random() * (max - min) + min)
@@ -41,10 +41,10 @@ let direction
 let LoopId
 
 const drawSnake = () => {
-    cxt.fillStyle = "#ddd"
+    cxt.fillStyle = "#C1F2B0"
     snake.forEach((position, index) => {
         if (index == snake.length - 1) {
-            cxt.fillStyle = "#7FC7D9"
+            cxt.fillStyle = "#65B741"
         }
         cxt.fillRect(position.x, position.y, size, size)
     })
@@ -53,9 +53,9 @@ const drawSnake = () => {
 const drawFood = () => {
     const { x, y, color } = food
 
-    cxt.shadowColor = "yellow"
+    cxt.shadowColor =  randomFoodColor()
     cxt.shadowBlur = 10
-    cxt.fillStyle = color
+    cxt.fillStyle = randomFoodColor()
     cxt.fillRect(x, y, size, size)
     cxt.shadowBlur = 0
 }
@@ -145,8 +145,8 @@ const gameOver = () => {
     direction = undefined
 
     menu.style.display = "flex"
-    finalScore.innerText - score
-    canvas.style.filter = "blur(3px)"
+    finalScore.innerText = score.innerText
+    canvas.style.filter = "blur(4px)"
 }
 
 const gameLoop = () => {
@@ -182,4 +182,12 @@ document.addEventListener("keydown", ({ key }) => {
     if (key == "ArrowUp" && direction != "down") {
         direction = "up"
     }
+})
+
+buttonPlayAgain.addEventListener("click", () => {
+    score.innerText = "00"
+    menu.style.display = "none"
+    canvas.style.filter = "none"
+
+    snake =  [{ x: 270, y: 240 }]
 })
