@@ -160,8 +160,8 @@ const gameLoop = () => {
     cxt.clearRect(0, 0, 600, 600)
     drawGrid()
     moveSnake()
-    drawSnake()
     drawFood()
+    drawSnake()
     checkEat()
     checkCollision()
 
